@@ -2,7 +2,7 @@ const express = require("express");
 
 const Router = express.Router();
 
-const productController = require("../controllers/product");
+const productController = require("../controller/product");
 
 // Router.get("/greetings", async (request, response) => {
 // try {
@@ -12,11 +12,14 @@ const productController = require("../controllers/product");
 // }
 // });
 
-Router.get("/greetings", productController.showGreetings);
 // Path Create
 // Path Read
 // Path Update
 // Path Delete
 Router.post("/create", productController.createProduct);
+Router.get("/", productController.getAllProduct);
+Router.get("/:productId", productController.getProductById);
+Router.patch("/update/:productId", productController.updateProduct);
+Router.delete("/delete/:productId", productController.deleteProduct);
 
 module.exports = Router;

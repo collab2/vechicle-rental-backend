@@ -8,7 +8,7 @@ const helmet = require("helmet");
 const xss = require("xss-clean");
 const compression = require("compression");
 const bodyParser = require("body-parser");
-const client = require("./config/redis");
+// const client = require("./src/config/redis");
 
 const routerNavigation = require("./src/routes/index");
 
