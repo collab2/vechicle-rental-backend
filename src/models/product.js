@@ -27,7 +27,6 @@ module.exports = {
   getCountProduct: () =>
     new Promise((resolve, reject) => {
       connection.query(
-        // `SELECT * FROM product LIMIT ${limit} OFFSET ${offset}`, SELECT * FROM product LIMIT 5 OFFSET 0; DROP TABLE product;
         "SELECT COUNT(location) FROM product",
         (error, result) => {
           if (!error) {
@@ -41,7 +40,6 @@ module.exports = {
   getCountProductById: (productId) =>
     new Promise((resolve, reject) => {
       connection.query(
-        // `SELECT * FROM product LIMIT ${limit} OFFSET ${offset}`, SELECT * FROM product LIMIT 5 OFFSET 0; DROP TABLE product;
         `SELECT COUNT("productId") FROM product WHERE "productId"='${productId}'`,
         (error, result) => {
           if (!error) {
@@ -55,7 +53,6 @@ module.exports = {
   getAllProduct: (limit, offset) =>
     new Promise((resolve, reject) => {
       connection.query(
-        // `SELECT * FROM product LIMIT ${limit} OFFSET ${offset}`, SELECT * FROM product LIMIT 5 OFFSET 0; DROP TABLE product;
         "SELECT * FROM product LIMIT $1 OFFSET $2",
         [limit, offset],
         (error, result) => {
@@ -70,14 +67,11 @@ module.exports = {
   getProductById: (productId) =>
     new Promise((resolve, reject) => {
       connection.query(
-        // `SELECT * FROM product LIMIT ${limit} OFFSET ${offset}`, SELECT * FROM product LIMIT 5 OFFSET 0; DROP TABLE product;
-        `SELECT * FROM product WHERE 'productId'='${productId}'`,
-
+        `SELECT * FROM product WHERE "productId"='${productId}'`,
         (error, result) => {
           if (!error) {
             resolve(result);
           } else {
-            console.log(error);
             reject(new Error(error));
           }
         }
@@ -99,7 +93,6 @@ module.exports = {
   deleteProduct: (productId) =>
     new Promise((resolve, reject) => {
       connection.query(
-        // `SELECT * FROM product LIMIT ${limit} OFFSET ${offset}`, SELECT * FROM product LIMIT 5 OFFSET 0; DROP TABLE product;
         `DELETE FROM product WHERE "productId"='${productId}'`,
         (error, result) => {
           if (!error) {
