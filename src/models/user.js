@@ -14,7 +14,7 @@ module.exports = {
   getDataById: (id) =>
     new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM users WHERE "userId" = $1`,
+        `SELECT "userId", "createdAt", "updatedAt", "role", "name", "email", "address", "phone", "gender", "birthDate", "image" FROM users WHERE "userId" = $1`,
         [id],
         (error, result) => {
           if (!error) {
@@ -55,7 +55,6 @@ module.exports = {
     }),
   updateStatusActive: (id, data) =>
     new Promise((resolve, reject) => {
-      console.log(id, data);
       connection.query(
         `UPDATE users SET "statusActive"= $1 WHERE "userId" = $2`,
         [data.statusActive, id],
@@ -68,34 +67,58 @@ module.exports = {
         }
       );
     }),
-  //   deleteUser: (id) =>
-  //     new Promise((resolve, reject) => {
-  //       supabase
-  //         .from("user")
-  //         .delete()
-  //         .eq("userId", id)
-  //         .select(
-  //           "userId, name, gender, profession, nationality, dateOfBirth, phoneNumber, role, createdAt, updatedAt"
-  //         )
-  //         .then((result) => {
-  //           if (!result.error) {
-  //             resolve(result);
-  //           } else {
-  //             reject(result);
-  //           }
-  //         });
-  //     }),
-  //   getCountUser: () =>
-  //     new Promise((resolve, reject) => {
-  //       supabase
-  //         .from("user")
-  //         .select("*", { count: "exact" })
-  //         .then((result) => {
-  //           if (!result.error) {
-  //             resolve(result.count);
-  //           } else {
-  //             reject(result);
-  //           }
-  //         });
-  //     }),
+  updateProfile: (id, data) =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        `UPDATE users SET "name" = $1, "address" = $2, "phone" = $3, "gender" = $4, "birthDate" = $5, "image" = $6 WHERE "userId" = $7`,
+        [
+          data.name,
+          data.address,
+          data.phone,
+          data.gender,
+          data.birthDate,
+          data.image,
+          id,
+        ],
+        (error, result) => {
+          if (!error) {
+            resolve(result);
+          } else {
+            reject(new Error(error));
+          }
+        }
+      );
+    }),
 };
+//   deleteUser: (id) =>
+//     new Promise((resolve, reject) => {
+//       supabase
+//         .from("user")
+//         .delete()
+//         .eq("userId", id)
+//         .select(
+//           "userId, name, gender, profession, nationality, dateOfBirth, phoneNumber, role, createdAt, updatedAt"
+//         )
+//         .then((result) => {
+//           if (!result.error) {
+//             resolve(result);
+//           } else {
+//             reject(result);
+//           }
+//         });
+//     }),
+//   getCountUser: () =>
+//     new Promise((resolve, reject) => {
+//       supabase
+//         .from("user")
+//         .select("*", { count: "exact" })
+//         .then((result) => {
+//           if (!result.error) {
+//             resolve(result.count);
+//           } else {
+//             reject(result);
+//           }
+//         });
+//     }),
+
+// };
