@@ -3,8 +3,13 @@ const express = require("express");
 const Router = express.Router();
 
 const productController = require("../controller/product");
+const uploadMiddleware = require("../middleware/uploadFile");
 
-Router.post("/create", productController.createProduct);
+Router.post(
+  "/create",
+  uploadMiddleware.uploadProduct,
+  productController.createProduct
+);
 Router.get("/", productController.getAllProduct);
 Router.get("/:productId", productController.getProductById);
 Router.patch("/update/:productId", productController.updateProduct);

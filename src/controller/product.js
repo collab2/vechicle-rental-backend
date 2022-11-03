@@ -15,6 +15,10 @@ module.exports = {
         capacity,
       } = request.body;
 
+      const newArr = [];
+      request.files.forEach((elem) => newArr.push(elem.filename));
+      const image = newArr.join(", ") || [];
+
       const setData = {
         nameProduct,
         location,
@@ -24,11 +28,14 @@ module.exports = {
         price,
         category,
         capacity,
+        image,
       };
+
       await productModel.createProduct(setData);
       //   console.log(result);
       return wrapper.response(response, 200, "Success Create Product", setData);
     } catch (error) {
+      console.log(error);
       const {
         status = 500,
         statusText = "Internal Server Error",
@@ -79,6 +86,7 @@ module.exports = {
 
       const result = await productModel.getProductById(productId);
 
+      // console.log(result.rows.slice(6, 7));
       return wrapper.response(
         response,
         200,

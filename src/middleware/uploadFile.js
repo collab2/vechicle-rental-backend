@@ -4,29 +4,32 @@ const wrapper = require("../utils/wrapper");
 const cloudinary = require("../config/cloudinary");
 
 module.exports = {
-  uploadImagePortfolio: (req, res, next) => {
+  uploadProduct: (req, res, next) => {
     const storage = new CloudinaryStorage({
       cloudinary,
       params: {
-        folder: "AutoRent/Portfolio",
+        folder: "AutoRent/product",
       },
     });
 
     const fileFilter = (request, file, cb) => {
       if (file.mimetype.startsWith("image")) {
-        return cb(null, true);
+        cb(null, true);
+      } else {
+        cb(null, false);
+        return cb(new Error("Only .png .jpg and .jpeg format allowed!"));
       }
-      cb(null, false);
-      return cb(new Error("Only .png .jpg and .jpeg format allowed!"));
     };
 
     const upload = multer({
       storage,
       fileFilter,
       limits: { fileSize: 500_000 },
-    }).array("image");
+    });
+
+    const uploadFiles = upload.array("image", 2);
     // eslint-disable-next-line consistent-return
-    upload(req, res, (err) => {
+    uploadFiles(req, res, (err) => {
       if (err instanceof multer.MulterError) {
         // A Multer error occurred when uploading.
         return wrapper.response(res, 401, err.message, null);
@@ -40,6 +43,7 @@ module.exports = {
       next();
     });
   },
+
   uploadUser: (req, res, next) => {
     const storage = new CloudinaryStorage({
       cloudinary,
