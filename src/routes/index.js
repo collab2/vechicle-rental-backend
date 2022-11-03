@@ -1,5 +1,6 @@
 const router = require("express").Router();
+const auth = require("./auth");
 
-// ISI ROUTER DARI REQUEST KALIAN
+router.use("/auth", auth);
 
 module.exports = router;
