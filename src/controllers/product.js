@@ -47,7 +47,6 @@ module.exports = {
       //   console.log(result);
       return wrapper.response(response, 200, "Success Create Product", setData);
     } catch (error) {
-      console.log(error);
       const {
         status = 500,
         statusText = "Internal Server Error",
