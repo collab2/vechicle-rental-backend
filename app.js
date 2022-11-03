@@ -1,5 +1,5 @@
-require("dotenv").config();
 const express = require("express");
+require("dotenv").config();
 
 const app = express();
 const cors = require("cors");
@@ -9,7 +9,7 @@ const xss = require("xss-clean");
 const compression = require("compression");
 const bodyParser = require("body-parser");
 
-const routerNavigation = require("./routes/index");
+const routerNavigation = require("./src/routes/index");
 
 app.use(cors()); // kemanan juga
 app.use(helmet()); // helmet = untuk keaman dibagian header
