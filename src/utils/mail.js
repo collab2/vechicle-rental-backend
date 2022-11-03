@@ -16,6 +16,7 @@ module.exports = {
           clientId: gmail.clientId,
           clientSecret: gmail.clientSecret,
           refreshToken: gmail.refreshToken,
+          accessToken: gmail.accessToken,
         },
       });
 
