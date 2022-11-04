@@ -27,6 +27,19 @@ module.exports = {
         }
       );
     }),
+  getProductFromCategory: () =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT * from product join category on (category."categoryId" = product."categoryId")`,
+        (error, result) => {
+          if (!error) {
+            resolve(result);
+          } else {
+            reject(new Error(error));
+          }
+        }
+      );
+    }),
   getCategoryByName: (name) =>
     new Promise((resolve, reject) => {
       connection.query(

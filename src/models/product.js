@@ -4,7 +4,7 @@ module.exports = {
   createProduct: (data) =>
     new Promise((resolve, reject) => {
       connection.query(
-        "INSERT INTO product (nameproduct, location, description, status, stock, price, category, capacity, image) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
+        `INSERT INTO product (nameproduct, location, description, status, stock, price, category, capacity, image, "categoryId") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
         [
           data.nameProduct,
           data.location,
@@ -15,6 +15,7 @@ module.exports = {
           data.category,
           data.capacity,
           data.image,
+          data.categoryId,
         ],
         (error, result) => {
           if (!error) {

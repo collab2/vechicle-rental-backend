@@ -13,6 +13,7 @@ module.exports = {
         price,
         category,
         capacity,
+        categoryId,
       } = request.body;
 
       const newArr = [];
@@ -29,6 +30,7 @@ module.exports = {
         category,
         capacity,
         image,
+        categoryId,
       };
 
       await productModel.createProduct(setData);
