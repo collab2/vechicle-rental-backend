@@ -9,6 +9,17 @@ module.exports = {
       const setData = {
         categoryName,
       };
+      const checkCategory = await categoryModel.getCategoryByName(categoryName);
+
+      if (checkCategory.rows.length === 1) {
+        return wrapper.response(
+          response,
+          404,
+          `${categoryName} Category is Already Registered`,
+          []
+        );
+      }
+
       const result = await categoryModel.createCategory(setData);
       console.log(result);
       return wrapper.response(response, 200, "Success Create Product", setData);
