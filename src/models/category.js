@@ -27,10 +27,23 @@ module.exports = {
         }
       );
     }),
-  getProductFromCategory: () =>
+  getProductFromCategory: (category) =>
     new Promise((resolve, reject) => {
+      if (!category) {
+        connection.query(
+          `SELECT * from product join category on (category."categoryId" = product."categoryId")`,
+          (error, result) => {
+            if (!error) {
+              resolve(result);
+            } else {
+              reject(new Error(error));
+            }
+          }
+        );
+      }
       connection.query(
-        `SELECT * from product join category on (category."categoryId" = product."categoryId")`,
+        `SELECT * from product join category on (category."categoryId" = product."categoryId") WHERE category."categoryName" = $1`,
+        [category],
         (error, result) => {
           if (!error) {
             resolve(result);

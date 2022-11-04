@@ -53,8 +53,10 @@ module.exports = {
     }
   },
   getAllProductFromCategory: async (request, response) => {
+    const { category } = request.query;
     try {
-      const result = await categoryModel.getProductFromCategory();
+      console.log(category);
+      const result = await categoryModel.getProductFromCategory(category);
       // const data = result.rows.map((item) => item.categoryName);
       // console.log(data);
       return wrapper.response(
