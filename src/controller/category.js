@@ -11,7 +11,12 @@ module.exports = {
       };
       const result = await categoryModel.createCategory(setData);
       console.log(result);
-      return wrapper.response(response, 200, "Success Create Product", setData);
+      return wrapper.response(
+        response,
+        200,
+        "Success Create Category",
+        setData
+      );
     } catch (error) {
       console.log(error);
       const {
@@ -26,8 +31,27 @@ module.exports = {
     try {
       const result = await categoryModel.getAllCategory();
       const data = result.rows.map((item) => item.categoryName);
-      console.log(data);
       return wrapper.response(response, 200, "Success Get Category", data);
+    } catch (error) {
+      const {
+        status = 500,
+        statusText = "Internal Server Error",
+        error: errorData = null,
+      } = error;
+      return wrapper.response(response, status, statusText, errorData);
+    }
+  },
+  getAllProductFromCategory: async (request, response) => {
+    try {
+      const result = await categoryModel.getProductFromCategory();
+      // const data = result.rows.map((item) => item.categoryName);
+      // console.log(data);
+      return wrapper.response(
+        response,
+        200,
+        "Success Get Category",
+        result.rows
+      );
     } catch (error) {
       const {
         status = 500,
