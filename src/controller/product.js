@@ -124,7 +124,7 @@ module.exports = {
 
       const resArr = [];
       data.rows.filter((item) => {
-        const i = resArr.findIndex((x) => x.categoryName == item.categoryName);
+        const i = resArr.findIndex((x) => x.categoryName === item.categoryName);
         if (i <= -1) {
           resArr.push(item.categoryName);
         }
