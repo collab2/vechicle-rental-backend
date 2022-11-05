@@ -1,4 +1,5 @@
 const wrapper = require("../utils/wrapper");
+const cloudinary = require("../config/cloudinary");
 const productModel = require("../models/product");
 
 module.exports = {
@@ -16,10 +17,12 @@ module.exports = {
         categoryId,
       } = request.body;
 
-      const newArr = [];
-      request.files.forEach((elem) => newArr.push(elem.filename));
-      const image = newArr.join(", ") || [];
+      // const newArr = [];
+      // console.log(request.files?.image2[0].filename);
+      // request.files.forEach((elem) => newArr.push(elem.filename));
+      // const image = newArr.join(", ") || [];
 
+      console.log(request.files.image);
       const setData = {
         nameProduct,
         location,
@@ -29,9 +32,13 @@ module.exports = {
         price,
         category,
         capacity,
-        image,
+        image1: !request.files.image1 ? "" : request.files.image1[0].filename,
+        image2: !request.files.image2 ? "" : request.files.image2[0].filename,
+        image3: !request.files.image3 ? "" : request.files.image3[0].filename,
         categoryId,
       };
+
+      console.log(setData);
 
       await productModel.createProduct(setData);
       //   console.log(result);
@@ -107,7 +114,6 @@ module.exports = {
   updateProduct: async (request, response) => {
     try {
       const { productId } = request.params;
-
       // console.log(request.file);
       const {
         nameProduct,
@@ -120,22 +126,84 @@ module.exports = {
         capacity,
       } = request.body;
 
-      await productModel.getProductById(productId);
+      const getDataProduct = await productModel.getProductById(productId);
 
-      const setData = {
-        nameProduct,
-        location,
-        description,
-        status,
-        stock,
-        price,
-        category,
-        capacity,
-      };
+      let setData = {};
+
+      if (!request.files) {
+        setData = {
+          nameProduct: nameProduct || getDataProduct.rows[0].nameproduct,
+          location: location || getDataProduct.rows[0].location,
+          description: description || getDataProduct.rows[0].description,
+          status: status || getDataProduct.rows[0].status,
+          stock: stock || getDataProduct.rows[0].stock,
+          image1: getDataProduct.rows[0].image1,
+          image2: getDataProduct.rows[0].image2,
+          image3: getDataProduct.rows[0].image3,
+          price: price || getDataProduct.rows[0].price,
+          category: category || getDataProduct.rows[0].category,
+          capacity: capacity || getDataProduct.rows[0].capacity,
+        };
+      } else {
+        setData = {
+          nameProduct: nameProduct || getDataProduct.rows[0].nameproduct,
+          location: location || getDataProduct.rows[0].location,
+          description: description || getDataProduct.rows[0].description,
+          status: status || getDataProduct.rows[0].status,
+          stock: stock || getDataProduct.rows[0].stock,
+          image1: request.files.image1
+            ? request.files?.image1[0].filename
+            : getDataProduct.rows[0].image1,
+          image2: request.files.image2
+            ? request.files?.image2[0].filename
+            : getDataProduct.rows[0].image2,
+          image3: request.files.image3
+            ? request.files?.image3[0].filename
+            : getDataProduct.rows[0].image3,
+          price: price || getDataProduct.rows[0].price,
+          category: category || getDataProduct.rows[0].category,
+          capacity: capacity || getDataProduct.rows[0].capacity,
+        };
+      }
+
+      if (getDataProduct.rows.length === 0) {
+        return wrapper.response(response, 404, "product not found", []);
+      }
+
+      console.log(request.files);
+
+      if (request.files?.image1) {
+        cloudinary.uploader.destroy(
+          getDataProduct?.rows[0]?.image1,
+          (result) => {
+            console.log(result);
+          }
+        );
+      }
+      if (request.files?.image2) {
+        cloudinary.uploader.destroy(
+          getDataProduct?.rows[0]?.image2,
+          (result) => {
+            console.log(result);
+          }
+        );
+      }
+      if (request.files?.image3) {
+        cloudinary.uploader.destroy(
+          getDataProduct?.rows[0]?.image3,
+          (result) => {
+            console.log(result);
+          }
+        );
+      }
 
       await productModel.updateProduct(productId, setData);
-
-      return wrapper.response(response, 200, "Success Update Data", setData);
+      return wrapper.response(response, 200, "success update date", setData);
+      // const event = await productModel.updateProduct(productId, setData);
+      // return wrapper.response(response, event.status, "succes s updated", {
+      //   ...event.data[0],
+      //   setData,
+      // });
     } catch (error) {
       console.log(error);
       const {

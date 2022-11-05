@@ -25,11 +25,13 @@ module.exports = {
       storage,
       fileFilter,
       limits: { fileSize: 500_000 },
-    });
+    }).fields([
+      { name: "image1", maxCount: 1 },
+      { name: "image2", maxCount: 1 },
+      { name: "image3", maxCount: 1 },
+    ]);
 
-    const uploadFiles = upload.array("image", 2);
-    // eslint-disable-next-line consistent-return
-    uploadFiles(req, res, (err) => {
+    upload(req, res, (err) => {
       if (err instanceof multer.MulterError) {
         // A Multer error occurred when uploading.
         return wrapper.response(res, 401, err.message, null);
@@ -42,6 +44,47 @@ module.exports = {
       // Everything went fine.
       next();
     });
+
+    // const upload2 = multer({
+    //   storage,
+    //   fileFilter,
+    //   limits: { fileSize: 500_000 },
+    // }).single("image2");
+
+    // upload2(req, res, (err) => {
+    //   if (err instanceof multer.MulterError) {
+    //     // A Multer error occurred when uploading.
+    //     console.log(err);
+    //     return wrapper.response(res, 401, err.message, null);
+    //   }
+    //   if (err) {
+    //     // An unknown error occurred when uploading.
+    //     return wrapper.response(res, 401, err.message, null);
+    //   }
+
+    //   // Everything went fine.
+    //   next();
+    // });
+
+    // const upload3 = multer({
+    //   storage,
+    //   fileFilter,
+    //   limits: { fileSize: 500_000 },
+    // }).single("image3");
+
+    // upload3(req, res, (err) => {
+    //   if (err instanceof multer.MulterError) {
+    //     // A Multer error occurred when uploading.
+    //     return wrapper.response(res, 401, err.message, null);
+    //   }
+    //   if (err) {
+    //     // An unknown error occurred when uploading.
+    //     return wrapper.response(res, 401, err.message, null);
+    //   }
+
+    //   // Everything went fine.
+    //   next();
+    // });
   },
 
   uploadUser: (req, res, next) => {
