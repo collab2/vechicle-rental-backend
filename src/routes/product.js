@@ -18,5 +18,6 @@ Router.patch(
   productController.updateProduct
 );
 Router.delete("/delete/:productId", productController.deleteProduct);
+Router.patch("/delete/image/:productId", productController.deleteImage);
 
 module.exports = Router;

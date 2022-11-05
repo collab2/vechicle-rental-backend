@@ -125,4 +125,20 @@ module.exports = {
         }
       );
     }),
+  deleteImageProduct: (data) =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        `UPDATE product
+        SET ${Object.keys(data)[0]} = NULL
+      WHERE ${Object.keys(data)[0]}=$1`,
+        [data[Object.keys(data)[0]]],
+        (error, result) => {
+          if (!error) {
+            resolve(result);
+          } else {
+            reject(new Error(error));
+          }
+        }
+      );
+    }),
 };
