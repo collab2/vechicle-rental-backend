@@ -3,8 +3,9 @@ const connection = require("../config/postgresql");
 module.exports = {
   createProduct: (data) =>
     new Promise((resolve, reject) => {
+      console.log(data);
       connection.query(
-        `INSERT INTO product (nameproduct, location, description, status, stock, price, category, capacity, image, "categoryId") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+        `INSERT INTO product (nameproduct, location, description, status, stock, price, category, capacity, image1, image2, image3, "categoryId") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
         [
           data.nameProduct,
           data.location,
@@ -14,7 +15,9 @@ module.exports = {
           data.price,
           data.category,
           data.capacity,
-          data.image,
+          data.image1,
+          data.image2,
+          data.image3,
           data.categoryId,
         ],
         (error, result) => {
@@ -84,7 +87,7 @@ module.exports = {
   updateProduct: (productId, data) =>
     new Promise((resolve, reject) => {
       connection.query(
-        `UPDATE product SET nameProduct=$1, location=$2, description=$3, status=$4, stock=$5, price=$6, category=$7, capacity=$8 WHERE "productId" = $8`,
+        `UPDATE product SET nameProduct=$1, location=$2, description=$3, status=$4, stock=$5, price=$6, category=$7, capacity=$8, image1=$9, image2=$10, image3=$11 WHERE "productId" = $12`,
         [
           data.nameProduct,
           data.location,
@@ -94,6 +97,9 @@ module.exports = {
           data.price,
           data.category,
           data.capacity,
+          data.image1,
+          data.image2,
+          data.image3,
           productId,
         ],
         (error, result) => {
