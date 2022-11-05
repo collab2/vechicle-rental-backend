@@ -1,5 +1,6 @@
 const wrapper = require("../utils/wrapper");
 const reservationModel = require("../models/reservation");
+const snapMidtrnas = require("../utils/snapMidtrnas");
 
 module.exports = {
   createReservation: async (request, response) => {
@@ -12,6 +13,7 @@ module.exports = {
         quantity,
         statusPayment,
         userId,
+        amount,
         productId,
       } = request.body;
 
@@ -26,16 +28,23 @@ module.exports = {
         statusPayment,
         userId,
         productId,
+        amount,
       };
 
       await reservationModel.createReservation(setData);
+      const reservationData = await reservationModel.getLastReservation();
+      // console.log(reservationData.rows[0].reservationId);
+      // console.log(typof );
+      const redirectUrl = await snapMidtrnas.post({
+        reservationId: reservationData.rows[0].reservationId,
+        amount,
+      });
+      console.log(reservationData.rows);
 
-      return wrapper.response(
-        response,
-        200,
-        "Success Create Reservation",
-        setData
-      );
+      return wrapper.response(response, 200, "Success Create Reservation", {
+        redirectUrl,
+        amount,
+      });
     } catch (error) {
       console.log(error);
       const {

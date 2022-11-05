@@ -3,10 +3,12 @@ const snapMidtrans = require("../config/midtrans");
 module.exports = {
   post: (data) =>
     new Promise((resolve, reject) => {
+      console.log(data.reservationId);
+      console.log(data.amount);
       const parameter = {
         transaction_details: {
-          order_id: data.bookingId,
-          gross_amount: data.totalPayment,
+          order_id: data.reservationId,
+          gross_amount: data.amount,
         },
         credit_card: {
           secure: true,
