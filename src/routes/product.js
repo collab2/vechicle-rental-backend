@@ -10,6 +10,7 @@ Router.post(
   uploadMiddleware.uploadProduct,
   productController.createProduct
 );
+Router.get("/category", productController.getAllProductByCategory);
 Router.get("/", productController.getAllProduct);
 Router.get("/:productId", productController.getProductById);
 Router.patch(
@@ -18,6 +19,7 @@ Router.patch(
   productController.updateProduct
 );
 Router.delete("/delete/:productId", productController.deleteProduct);
+
 Router.patch("/delete/image/:productId", productController.deleteImage);
 
 module.exports = Router;

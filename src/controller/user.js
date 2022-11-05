@@ -20,18 +20,19 @@ module.exports = {
     try {
       const { id } = req.params;
       const image = req?.file?.filename;
+      const checkId = await userModel.getDataById(id);
       const { name, address, phone, birthDate, gender } = req.body;
       const setData = {
-        name,
-        address,
-        phone,
-        birthDate,
-        gender,
-        image,
+        name: name || checkId.rows[0].name,
+        address: address || checkId.rows[0].address,
+        phone: phone || checkId.rows[0].phone,
+        birthDate: birthDate || checkId.rows[0].birthDate,
+        gender: gender || checkId.rows[0].gender,
+        image: image || checkId.rows[0].image,
         updatedAt: new Date(),
       };
 
-      const checkId = await userModel.getDataById(id);
+      console.log(checkId.rows[0]);
       if (image) {
         cloudinary.uploader.destroy(checkId?.rows[0]?.image, (result) => {
           console.log(result);
