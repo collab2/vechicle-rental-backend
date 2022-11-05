@@ -4,7 +4,7 @@ module.exports = {
   createReservation: (data) =>
     new Promise((resolve, reject) => {
       connection.query(
-        `INSERT INTO reservation (location, "startDate", "returnDate", "paymentMethods", "quantity", "reservationDate", "statusPayment", "userId", "productId") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+        `INSERT INTO reservation (location, "startDate", "returnDate", "paymentMethods", "quantity", "reservationDate", "statusPayment", "userId", "productId", "amount") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
         [
           data.location,
           data.startDate,
@@ -15,12 +15,29 @@ module.exports = {
           data.statusPayment,
           data.userId,
           data.productId,
+          data.amount,
         ],
         (error, result) => {
           if (!error) {
             resolve(result);
           } else {
             reject(new Error(error));
+          }
+        }
+      );
+    }),
+  getLastReservation: () =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        ` SELECT "reservationId", amount
+        FROM reservation
+        ORDER BY "createdAt" DESC
+        LIMIT 1`,
+        (error, result) => {
+          if (!error) {
+            resolve(result);
+          } else {
+            reject(result);
           }
         }
       );
