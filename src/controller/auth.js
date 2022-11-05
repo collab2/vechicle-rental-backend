@@ -64,7 +64,7 @@ module.exports = {
           subject: "email verification",
           template: "verificationEmail.html",
 
-          buttonUrl: `http://localhost:${process.env.PORT}/api/auth/verify/${generateOtp}`,
+          buttonUrl: `https://vechicle-rental-backend-h31rtyi6f-collab2.vercel.app/api/auth/verify/${generateOtp}`,
           otp: generateOtp,
         };
 
@@ -94,7 +94,7 @@ module.exports = {
         to: email,
         subject: "email verification",
         template: "verificationEmail.html",
-        buttonUrl: `http://localhost:${process.env.PORT}/api/auth/verify/${generateOtp}`,
+        buttonUrl: `https://vechicle-rental-backend-h31rtyi6f-collab2.vercel.app/api/auth/verify/${generateOtp}`,
         otp: generateOtp,
       };
 
@@ -307,7 +307,7 @@ module.exports = {
         to: email,
         subject: "forgot password",
         template: "resetPassword.html",
-        buttonUrl: `http://localhost:${process.env.PORT}/api/auth/resetPassword/${generateOtp}`,
+        buttonUrl: `https://vechicle-rental-backend-h31rtyi6f-collab2.vercel.app/api/auth/resetPassword/${generateOtp}`,
         otp: generateOtp,
       };
 
