@@ -70,6 +70,21 @@ module.exports = {
         }
       );
     }),
+  getProductByCategory: () =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT *
+        FROM product
+        JOIN category ON product."categoryId"=category."categoryId"`,
+        (error, result) => {
+          if (!error) {
+            resolve(result);
+          } else {
+            reject(new Error(error));
+          }
+        }
+      );
+    }),
   getProductById: (productId) =>
     new Promise((resolve, reject) => {
       connection.query(

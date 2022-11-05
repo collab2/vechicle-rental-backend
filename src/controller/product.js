@@ -89,6 +89,60 @@ module.exports = {
       return wrapper.response(response, status, statusText, errorData);
     }
   },
+  getAllProductByCategory: async (req, res) => {
+    try {
+      const data = await productModel.getProductByCategory();
+      const findTitles = (categories) => {
+        const result = [];
+        for (let i = 0; i < categories.length; i += 1) {
+          const resultObj = {};
+          resultObj.category = categories[i];
+          resultObj.items = [];
+          data.rows.forEach((val) => {
+            if (val.categoryName.includes(categories[i])) {
+              resultObj.items.push({
+                productId: val.productId,
+                createdAt: val.createdAt,
+                nameProduct: val.nameProduct,
+                location: val.location,
+                description: val.description,
+                status: val.status,
+                image1: val.image1,
+                price: val.price,
+                category: val.category,
+                capacity: val.capacity,
+                categoryId: val.categoryId,
+                image2: val.image2,
+                image3: val.image3,
+              });
+            }
+          });
+          result.push(resultObj);
+        }
+        return result;
+      };
+
+      const resArr = [];
+      data.rows.filter((item) => {
+        const i = resArr.findIndex((x) => x.categoryName == item.categoryName);
+        if (i <= -1) {
+          resArr.push(item.categoryName);
+        }
+        return null;
+      });
+
+      const category = [...new Set(resArr)];
+
+      return wrapper.response(
+        res,
+        200,
+        "succes get product by category",
+        findTitles(category)
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  },
   getProductById: async (request, response) => {
     try {
       const { productId } = request.params;
