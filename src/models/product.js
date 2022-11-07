@@ -56,19 +56,45 @@ module.exports = {
         }
       );
     }),
-  getAllProduct: (limit, offset) =>
+  getAllProduct: (limit, offset, sort) =>
     new Promise((resolve, reject) => {
-      connection.query(
-        "SELECT * FROM product LIMIT $1 OFFSET $2",
-        [limit, offset],
-        (error, result) => {
-          if (!error) {
-            resolve(result);
-          } else {
-            reject(new Error(error));
+      if (!sort) {
+        connection.query(
+          "SELECT * FROM product LIMIT $1 OFFSET $2",
+          [limit, offset],
+          (error, result) => {
+            if (!error) {
+              resolve(result);
+            } else {
+              reject(new Error(error));
+            }
           }
-        }
-      );
+        );
+      } else if (sort === "latest") {
+        connection.query(
+          `SELECT * FROM product order by  "createdAt" ASC  LIMIT $1 OFFSET $2`,
+          [limit, offset],
+          (error, result) => {
+            if (!error) {
+              resolve(result);
+            } else {
+              reject(new Error(error));
+            }
+          }
+        );
+      } else if (sort === "newest") {
+        connection.query(
+          `SELECT * FROM product order by  "createdAt" DESC  LIMIT $1 OFFSET $2`,
+          [limit, offset],
+          (error, result) => {
+            if (!error) {
+              resolve(result);
+            } else {
+              reject(new Error(error));
+            }
+          }
+        );
+      }
     }),
   getProductByCategory: () =>
     new Promise((resolve, reject) => {
