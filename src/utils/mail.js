@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
 const fs = require("fs");
 const mustache = require("mustache");
+const path = require("path");
 const gmail = require("../config/gmail");
 
 module.exports = {
@@ -20,10 +21,11 @@ module.exports = {
         },
       });
 
-      const fileTemplate = fs.readFileSync(
-        `src/templates/email/${data.template}`,
-        "utf8"
+      const filePath = path.join(
+        __dirname,
+        `../../templates/email/${data.template}`
       );
+      const fileTemplate = fs.readFileSync(filePath, "utf8");
 
       const mailOptions = {
         from: '"Event Organizing" <arkawebdev1@gmail.com>',
