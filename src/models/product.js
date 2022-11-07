@@ -56,12 +56,11 @@ module.exports = {
         }
       );
     }),
-  getAllProduct: (limit, offset, sort) =>
+  getAllProduct: (limit, offset, sort, nameproduct, location) =>
     new Promise((resolve, reject) => {
       if (!sort) {
         connection.query(
-          "SELECT * FROM product LIMIT $1 OFFSET $2",
-          [limit, offset],
+          `SELECT * FROM product where product.location ilike '%${location}%' and product.nameproduct ilike '%${nameproduct}%' limit ${limit} offset ${offset}`,
           (error, result) => {
             if (!error) {
               resolve(result);
@@ -72,7 +71,7 @@ module.exports = {
         );
       } else if (sort === "latest") {
         connection.query(
-          `SELECT * FROM product order by  "createdAt" ASC  LIMIT $1 OFFSET $2`,
+          `SELECT * FROM product where product.location ilike '%${location}%' and product.nameproduct ilike '%${nameproduct}%' limit ${limit} offset ${offset} ASC limit 5 offset 0`,
           [limit, offset],
           (error, result) => {
             if (!error) {
@@ -84,7 +83,7 @@ module.exports = {
         );
       } else if (sort === "newest") {
         connection.query(
-          `SELECT * FROM product order by  "createdAt" DESC  LIMIT $1 OFFSET $2`,
+          `SELECT * FROM product where product.location ilike '%${location}%' and product.nameproduct ilike '%${nameproduct}%' limit ${limit} offset ${offset} DESC limit 5 offset 0`,
           [limit, offset],
           (error, result) => {
             if (!error) {
