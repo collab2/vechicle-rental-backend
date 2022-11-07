@@ -172,6 +172,7 @@ module.exports = {
       return wrapper.response(response, 200, "Success Login", {
         userId: payload.userId,
         token,
+        role: payload.role,
         refreshToken,
       });
     } catch (error) {
