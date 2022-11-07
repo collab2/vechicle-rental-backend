@@ -70,6 +70,7 @@ module.exports = {
           }
         );
       } else if (sort === "latest") {
+        console.log("test2");
         connection.query(
           `SELECT * FROM product where product.location ilike '%${location}%' and product.nameproduct  ilike '%${nameproduct}%' order by  "createdAt" ASC limit ${limit} offset ${offset}`,
 
@@ -82,6 +83,7 @@ module.exports = {
           }
         );
       } else if (sort === "newest") {
+        console.log("test3");
         connection.query(
           `SELECT * FROM product where product.location ilike '%${location}%' and product.nameproduct  ilike '%${nameproduct}%' order by  "createdAt" DESC limit ${limit} offset ${offset}`,
 
