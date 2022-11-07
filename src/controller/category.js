@@ -38,6 +38,7 @@ module.exports = {
       return wrapper.response(response, status, statusText, errorData);
     }
   },
+
   getAllCategory: async (request, response) => {
     try {
       const result = await categoryModel.getAllCategory();
@@ -53,11 +54,14 @@ module.exports = {
     }
   },
   getAllProductFromCategory: async (request, response) => {
-    const { category } = request.query;
+    const { category, searchName, location } = request.query;
     try {
-      console.log(category);
-      const result = await categoryModel.getProductFromCategory(category);
-      // const data = result.rows.map((item) => item.categoryName);
+      const result = await categoryModel.getProductFromCategory(
+        category,
+        searchName,
+        location
+      );
+      const data = result.rows.map((item) => item.categoryName);
       // console.log(data);
       return wrapper.response(
         response,
