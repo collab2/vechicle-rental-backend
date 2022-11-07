@@ -26,6 +26,7 @@ module.exports = {
         //     exp: 1662783052
         //   }
         request.decodeToken = result;
+        return next();
       });
       return console.log();
     } catch (error) {

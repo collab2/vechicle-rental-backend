@@ -18,6 +18,8 @@ Router.get("/", productController.getAllProduct);
 Router.get("/:productId", productController.getProductById);
 Router.patch(
   "/update/:productId",
+  authMiddleware.authentication,
+  authMiddleware.isAdmin,
   uploadMiddleware.uploadProduct,
   productController.updateProduct
 );
@@ -28,6 +30,11 @@ Router.delete(
   productController.deleteProduct
 );
 
-Router.patch("/delete/image/:productId", productController.deleteImage);
+Router.patch(
+  "/delete/image/:productId",
+  authMiddleware.authentication,
+  authMiddleware.isAdmin,
+  productController.deleteImage
+);
 
 module.exports = Router;
