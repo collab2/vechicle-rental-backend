@@ -69,19 +69,31 @@ module.exports = {
         }
       );
     }),
-  getAllReservation: (limit, offset) =>
+  getAllReservation: (limit, offset, date, name = "", category = "") =>
     new Promise((resolve, reject) => {
-      connection.query(
-        "SELECT * FROM Reservation LIMIT $1 OFFSET $2",
-        [limit, offset],
-        (error, result) => {
-          if (!error) {
-            resolve(result);
-          } else {
-            reject(new Error(error));
+      if (date) {
+        connection.query(
+          `SELECT reservation."createdAt", product.nameproduct, product.category FROM reservation join product on (product."productId" = reservation."productId") WHERE CAST((reservation."createdAt" AT TIME ZONE 'UTC') AS date) = DATE '${date}' AND  product.nameproduct ilike '%${name}%' OR product.category = '${category}' LIMIT ${limit} OFFSET ${offset}`,
+          (error, result) => {
+            if (!error) {
+              resolve(result);
+            } else {
+              reject(new Error(error));
+            }
           }
-        }
-      );
+        );
+      } else {
+        connection.query(
+          `SELECT reservation."createdAt", product.nameproduct, product.category FROM reservation join product on (product."productId" = reservation."productId") WHERE product.nameproduct ilike '%${name}%' OR product.category = '%${category}%' LIMIT ${limit} OFFSET ${offset}`,
+          (error, result) => {
+            if (!error) {
+              resolve(result);
+            } else {
+              reject(new Error(error));
+            }
+          }
+        );
+      }
     }),
   getReservationById: (reservationId) =>
     new Promise((resolve, reject) => {

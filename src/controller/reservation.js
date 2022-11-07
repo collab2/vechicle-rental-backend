@@ -57,7 +57,7 @@ module.exports = {
   },
   getAllReservation: async (request, response) => {
     try {
-      let { page, limit } = request.query;
+      let { page, limit, date, name, category } = request.query;
       page = +page || 1;
       limit = +limit || 5;
 
@@ -74,7 +74,13 @@ module.exports = {
 
       const offset = page * limit - limit;
 
-      const result = await reservationModel.getAllReservation(limit, offset);
+      const result = await reservationModel.getAllReservation(
+        limit,
+        offset,
+        date,
+        name,
+        category
+      );
 
       return wrapper.response(
         response,
