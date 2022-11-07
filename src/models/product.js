@@ -56,19 +56,46 @@ module.exports = {
         }
       );
     }),
-  getAllProduct: (limit, offset) =>
+  getAllProduct: (limit, offset, sort, nameproduct, location) =>
     new Promise((resolve, reject) => {
-      connection.query(
-        "SELECT * FROM product LIMIT $1 OFFSET $2",
-        [limit, offset],
-        (error, result) => {
-          if (!error) {
-            resolve(result);
-          } else {
-            reject(new Error(error));
+      if (!sort) {
+        connection.query(
+          `SELECT * FROM product where product.location ilike '%${location}%' and product.nameproduct ilike '%${nameproduct}%' limit ${limit} offset ${offset}`,
+          (error, result) => {
+            if (!error) {
+              resolve(result);
+            } else {
+              reject(new Error(error));
+            }
           }
-        }
-      );
+        );
+      } else if (sort === "latest") {
+        console.log("test2");
+        connection.query(
+          `SELECT * FROM product where product.location ilike '%${location}%' and product.nameproduct  ilike '%${nameproduct}%' order by  "createdAt" ASC limit ${limit} offset ${offset}`,
+
+          (error, result) => {
+            if (!error) {
+              resolve(result);
+            } else {
+              reject(new Error(error));
+            }
+          }
+        );
+      } else if (sort === "newest") {
+        console.log("test3");
+        connection.query(
+          `SELECT * FROM product where product.location ilike '%${location}%' and product.nameproduct  ilike '%${nameproduct}%' order by  "createdAt" DESC limit ${limit} offset ${offset}`,
+
+          (error, result) => {
+            if (!error) {
+              resolve(result);
+            } else {
+              reject(new Error(error));
+            }
+          }
+        );
+      }
     }),
   getProductByCategory: () =>
     new Promise((resolve, reject) => {
