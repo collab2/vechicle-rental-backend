@@ -55,10 +55,10 @@ module.exports = {
   },
   getAllProduct: async (request, response) => {
     try {
-      let { page, limit } = request.query;
+      let { page, limit, sort } = request.query;
       page = +page || 1;
       limit = +limit || 5;
-
+      console.log(request.query);
       const totalData = await productModel.getCountProduct();
       const totalPage = Math.ceil(totalData.rows / limit);
       const resultTotalData = totalData.rows[0].count;
@@ -72,7 +72,7 @@ module.exports = {
 
       const offset = page * limit - limit;
 
-      const result = await productModel.getAllProduct(limit, offset);
+      const result = await productModel.getAllProduct(limit, offset, sort);
       return wrapper.response(
         response,
         200,
@@ -81,6 +81,7 @@ module.exports = {
         pagination
       );
     } catch (error) {
+      console.log(error);
       const {
         status = 500,
         statusText = "Internal Server Error",
