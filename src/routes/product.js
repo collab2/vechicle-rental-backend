@@ -4,9 +4,12 @@ const Router = express.Router();
 
 const productController = require("../controller/product");
 const uploadMiddleware = require("../middleware/uploadFile");
+const authMiddleware = require("../middleware/auth");
 
 Router.post(
   "/create",
+  authMiddleware.authentication,
+  authMiddleware.isAdmin,
   uploadMiddleware.uploadProduct,
   productController.createProduct
 );
@@ -18,7 +21,12 @@ Router.patch(
   uploadMiddleware.uploadProduct,
   productController.updateProduct
 );
-Router.delete("/delete/:productId", productController.deleteProduct);
+Router.delete(
+  "/delete/:productId",
+  authMiddleware.authentication,
+  authMiddleware.isAdmin,
+  productController.deleteProduct
+);
 
 Router.patch("/delete/image/:productId", productController.deleteImage);
 
