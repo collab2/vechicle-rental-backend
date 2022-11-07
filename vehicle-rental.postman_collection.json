@@ -1,0 +1,520 @@
+{
+	"info": {
+		"_postman_id": "c9f67bb3-30ae-4449-996a-194ff2adca42",
+		"name": "vehicle-rental",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15359137"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"setyawandwiki1@gmail.com\",\r\n    \"password\" : \"Denissaa6872^*&@\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://vechicle-rental-backend-4l1y7i6fe-collab2.vercel.app/api/auth/login",
+							"protocol": "https",
+							"host": [
+								"vechicle-rental-backend-4l1y7i6fe-collab2",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"ulul.cyka@gmail.com\",\r\n    \"password\" : \"And1mixtape!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "verify",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "refreshtoken",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "log out",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "forgotpassword",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"setyawandwiki1@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/forgotPassword",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"forgotPassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resetpassword",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "category",
+			"item": [
+				{
+					"name": "get product by id",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "product",
+			"item": [
+				{
+					"name": "create product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								},
+								{
+									"key": "nameProduct",
+									"value": "harus bisa 1",
+									"type": "text"
+								},
+								{
+									"key": "location",
+									"value": "test",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "test",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "available",
+									"type": "text"
+								},
+								{
+									"key": "stock",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "10000",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Motorbike",
+									"type": "text"
+								},
+								{
+									"key": "capacity",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "image1",
+									"type": "file",
+									"src": "/C:/Users/setya/Downloads/wave2.png"
+								},
+								{
+									"key": "categoryId",
+									"value": "4a9f4160-a47f-464e-ad7a-b52d266076dc",
+									"type": "text"
+								},
+								{
+									"key": "image3",
+									"type": "file",
+									"src": "/C:/Users/setya/Downloads/handle_jemuran.png"
+								},
+								{
+									"key": "image2",
+									"type": "file",
+									"src": "/C:/Users/setya/Downloads/wrongLogo.png",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "https://vechicle-rental-backend-htwlglhcn-collab2.vercel.app/api/product/create",
+							"protocol": "https",
+							"host": [
+								"vechicle-rental-backend-htwlglhcn-collab2",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"product",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all product from category",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "get product by category",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/product/category",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"product",
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get product by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://vechicle-rental-backend-h31rtyi6f-collab2.vercel.app/api/product/dca250b7-ed06-4ce0-a0ee-454779ecf67c",
+							"protocol": "https",
+							"host": [
+								"vechicle-rental-backend-h31rtyi6f-collab2",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"product",
+								"dca250b7-ed06-4ce0-a0ee-454779ecf67c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update image",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image1",
+									"type": "file",
+									"src": "/C:/Users/setya/Downloads/cool-background.png"
+								},
+								{
+									"key": "image2",
+									"type": "file",
+									"src": "/C:/Users/setya/Downloads/jebaited.png"
+								},
+								{
+									"key": "image3",
+									"type": "file",
+									"src": "/C:/Users/setya/Downloads/handle_jemuran.png"
+								},
+								{
+									"key": "name",
+									"value": "dwiki",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/product/update/a13c8f10-d40e-4341-99ca-caa5ea320113",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"product",
+								"update",
+								"a13c8f10-d40e-4341-99ca-caa5ea320113"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete image",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"image3\" : \"AutoRent/product/xir76yy1pbawxfkgtgbp\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/product/delete/image/a13c8f10-d40e-4341-99ca-caa5ea320113",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"product",
+								"delete",
+								"image",
+								"a13c8f10-d40e-4341-99ca-caa5ea320113"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "reservation",
+			"item": [
+				{
+					"name": "create reservation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"location\" : \"bojong1\",\r\n    \"startDate\" : \"2022-12-12\",\r\n    \"returnDate\": \"2022-12-13\",\r\n    \"paymentMethod\" : \"cash\",\r\n    \"quantity\" : 4,\r\n    \"statusPayment\" : \"success\",\r\n    \"userId\": \"0bab592c-afb8-4f6d-bba0-a3c0f5daed4b\",\r\n    \"productId\" : \"65c239fa-fbd8-44f0-9206-45faf2d26c22\",\r\n    \"amount\" : 200000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://vechicle-rental-backend-htwlglhcn-collab2.vercel.app/api/reservation/create",
+							"protocol": "https",
+							"host": [
+								"vechicle-rental-backend-htwlglhcn-collab2",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"reservation",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all reservation",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "update user",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/setya/Downloads/wrongLogo.png",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "danny",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "address",
+									"value": "bojong",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "phone",
+									"value": "123123",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "gender",
+									"value": "male",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "birthDate",
+									"value": "2022-10-10",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/user/83102127-31c0-4745-909d-7be3ddad2541",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"user",
+								"83102127-31c0-4745-909d-7be3ddad2541"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get data user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/api/user/83102127-31c0-4745-909d-7be3ddad2541",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"user",
+								"83102127-31c0-4745-909d-7be3ddad2541"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
