@@ -76,7 +76,7 @@ module.exports = {
         offset,
         sort,
         nameproduct || "",
-        location
+        location || ""
       );
       return wrapper.response(
         response,
