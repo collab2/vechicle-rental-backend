@@ -55,10 +55,9 @@ module.exports = {
   },
   getAllProduct: async (request, response) => {
     try {
-      let { page, limit, sort } = request.query;
+      let { page, limit, sort, nameproduct, location } = request.query;
       page = +page || 1;
       limit = +limit || 5;
-      console.log(request.query);
       const totalData = await productModel.getCountProduct();
       const totalPage = Math.ceil(totalData.rows / limit);
       const resultTotalData = totalData.rows[0].count;
@@ -72,7 +71,13 @@ module.exports = {
 
       const offset = page * limit - limit;
 
-      const result = await productModel.getAllProduct(limit, offset, sort);
+      const result = await productModel.getAllProduct(
+        limit,
+        offset,
+        sort,
+        nameproduct || "",
+        location
+      );
       return wrapper.response(
         response,
         200,
