@@ -1,5 +1,5 @@
-require("dotenv").config();
 const express = require("express");
+require("dotenv").config();
 
 const app = express();
 const cors = require("cors");
@@ -8,8 +8,9 @@ const helmet = require("helmet");
 const xss = require("xss-clean");
 const compression = require("compression");
 const bodyParser = require("body-parser");
+// const client = require("./src/config/redis");
 
-const routerNavigation = require("./routes/index");
+const routerNavigation = require("./src/routes/index");
 
 app.use(cors()); // kemanan juga
 app.use(helmet()); // helmet = untuk keaman dibagian header
