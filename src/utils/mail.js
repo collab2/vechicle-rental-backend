@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
-const fs = require("fs");
 const mustache = require("mustache");
+const fs = require("fs");
 const path = require("path");
 const gmail = require("../config/gmail");
 
@@ -23,8 +23,9 @@ module.exports = {
 
       const filePath = path.join(
         __dirname,
-        `../../templates/email/${data.template}`
+        `../templates/email/${data.template}`
       );
+
       const fileTemplate = fs.readFileSync(filePath, "utf8");
 
       const mailOptions = {
