@@ -71,8 +71,8 @@ module.exports = {
         );
       } else if (sort === "latest") {
         connection.query(
-          `SELECT * FROM product where product.location ilike '%${location}%' and product.nameproduct ilike '%${nameproduct}%' limit ${limit} offset ${offset} ASC limit 5 offset 0`,
-          [limit, offset],
+          `SELECT * FROM product where product.location ilike '%${location}%' and product.nameproduct  ilike '%${nameproduct}%' order by  "createdAt" ASC limit ${limit} offset ${offset}`,
+
           (error, result) => {
             if (!error) {
               resolve(result);
@@ -83,8 +83,8 @@ module.exports = {
         );
       } else if (sort === "newest") {
         connection.query(
-          `SELECT * FROM product where product.location ilike '%${location}%' and product.nameproduct ilike '%${nameproduct}%' limit ${limit} offset ${offset} DESC limit 5 offset 0`,
-          [limit, offset],
+          `SELECT * FROM product where product.location ilike '%${location}%' and product.nameproduct  ilike '%${nameproduct}%' order by  "createdAt" DESC limit ${limit} offset ${offset}`,
+
           (error, result) => {
             if (!error) {
               resolve(result);
