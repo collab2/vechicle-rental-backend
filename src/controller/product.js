@@ -148,6 +148,7 @@ module.exports = {
       const { productId } = request.params;
 
       const result = await productModel.getProductById(productId);
+      console.log(result);
 
       // console.log(result.rows.slice(6, 7));
       return wrapper.response(

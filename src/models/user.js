@@ -89,6 +89,20 @@ module.exports = {
         }
       );
     }),
+  getPasswordById: (id) =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT password FROM users WHERE "userId" = '${id}'`,
+
+        (error, result) => {
+          if (!error) {
+            resolve(result);
+          } else {
+            reject(new Error(error));
+          }
+        }
+      );
+    }),
 };
 //   deleteUser: (id) =>
 //     new Promise((resolve, reject) => {

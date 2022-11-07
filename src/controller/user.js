@@ -1,4 +1,5 @@
 const moment = require("moment");
+const bcrypt = require("bcrypt");
 const userModel = require("../models/user");
 const wrapper = require("../utils/wrapper");
 const cloudinary = require("../config/cloudinary");
@@ -45,6 +46,63 @@ module.exports = {
       console.log(error);
       //   const { status, statusText, error: errorData } = error;
       //   return wrapper.response(res, status, statusText, errorData);
+    }
+  },
+  updatePassword: async (request, response) => {
+    try {
+      const { userId } = request.params;
+      const { oldPassword, newPassword, confirmPassword } = request.body;
+      // 1. checking user
+      const checkId = await userModel.getDataById(userId);
+
+      if (checkId.rowCount === 0) {
+        return wrapper.response(
+          response,
+          404,
+          `Data By Id ${userId} Not Found`,
+          []
+        );
+      }
+      // 2. validate old password
+      const checkPassword = await userModel.getPasswordById(userId);
+
+      const validate = await bcrypt.compare(
+        oldPassword,
+        checkPassword.rows[0].password
+      );
+
+      console.log(validate);
+
+      if (!validate) {
+        if (!validate) {
+          return wrapper.response(response, 401, "Wrong Password!", null);
+        }
+      }
+      // 3. check if confirm password is the same as new password
+      if (confirmPassword !== newPassword) {
+        return wrapper.response(
+          response,
+          401,
+          "New Password doesn't match, Please Try Again"
+        );
+      }
+      // 4. hash the new password
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+      const setData = {
+        password: hashedPassword,
+      };
+
+      await userModel.updateUser(userId, setData);
+
+      return wrapper.response(response, 201, "Success Change Password", null);
+    } catch (error) {
+      const {
+        status = 500,
+        statusText = "Internal Server Error",
+        error: errorData = null,
+      } = error;
+      return wrapper.response(response, status, statusText, errorData);
     }
   },
 };

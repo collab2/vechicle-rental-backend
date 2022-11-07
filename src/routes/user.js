@@ -10,5 +10,6 @@ router.patch(
 );
 
 router.get("/:id", userController.getDataUser);
+router.patch("/password/:userId", userController.updatePassword);
 
 module.exports = router;
