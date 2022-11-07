@@ -3,7 +3,7 @@
 </div>
 <h1 align='center'>AutoRent</h1>
   <p align="center">
-    <a href="link_deploy">View Demo Backend</a>
+    <a href="http://vechicle-rental-backend.vercel.app/">View Demo Backend</a>
     ·
     <a href="https://github.com/collab2/vechicle-rental-backend/issues">Report Bug</a>
     ·
