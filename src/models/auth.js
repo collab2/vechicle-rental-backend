@@ -1,33 +1,19 @@
-const supabase = require("../config/supabase");
+const connection = require("../config/postgresql");
 
 module.exports = {
   // showGreetings: () => new Promise((resolve, reject) => {}),
   getUserByEmail: (email) =>
     new Promise((resolve, reject) => {
-      supabase
-        .from("user")
-        .select("*")
-        .eq("email", email)
-        .then((result) => {
-          if (!result.error) {
+      connection.query(
+        `SELECT * FROM users WHERE "email" = $1`,
+        [email],
+        (error, result) => {
+          if (!error) {
             resolve(result);
           } else {
-            reject(result);
+            reject(new Error(error));
           }
-        });
-    }),
-  getUserByUsername: (username) =>
-    new Promise((resolve, reject) => {
-      supabase
-        .from("user")
-        .select("*")
-        .eq("username", username)
-        .then((result) => {
-          if (!result.error) {
-            resolve(result);
-          } else {
-            reject(result);
-          }
-        });
+        }
+      );
     }),
 };

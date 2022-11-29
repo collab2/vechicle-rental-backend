@@ -45,9 +45,9 @@ module.exports = {
 
       // generate otp
       const findEmail = await authModel.getUserByEmail(email);
-      const checkUserActivation = findEmail.data[0]?.statusUser;
+      const checkUserActivation = findEmail.rows[0]?.statusActive;
 
-      if (findEmail.data.length > 0 && checkUserActivation === "active") {
+      if (findEmail.rows?.length > 0 && checkUserActivation === "active") {
         return wrapper.response(
           response,
           401,
@@ -56,10 +56,9 @@ module.exports = {
         );
       }
 
-      if (findEmail.data.length > 0) {
+      if (findEmail.rows.length > 0) {
         const generateOtp = Math.floor(100000 + Math.random() * 900000);
 
-        const user = await User.createUser(setData);
         const sendMailOptions = {
           to: email,
           subject: "email verification",
@@ -69,10 +68,12 @@ module.exports = {
           otp: generateOtp,
         };
 
+        const findEmail2 = await authModel.getUserByEmail(email);
+
         await client.setEx(
           `otp:${generateOtp}`,
           3600,
-          JSON.stringify({ userId: user.data[0].userId })
+          JSON.stringify({ userId: findEmail2.rows[0].userId })
         );
 
         await sendMail.sendMail(sendMailOptions);
@@ -89,18 +90,6 @@ module.exports = {
 
       const user = await User.createUser(setData);
 
-      const filterObj = ["userId"];
-
-      const filtered = Object.keys(user.data[0])
-        .filter((key) => filterObj.includes(key))
-        .reduce(
-          (obj, key) => ({
-            ...obj,
-            [key]: user.data[0][key],
-          }),
-          {}
-        );
-
       const sendMailOptions = {
         to: email,
         subject: "email verification",
@@ -109,10 +98,12 @@ module.exports = {
         otp: generateOtp,
       };
 
+      const findEmail2 = await authModel.getUserByEmail(email);
+
       await client.setEx(
         `otp:${generateOtp}`,
         3600,
-        JSON.stringify({ userId: user.data[0].userId })
+        JSON.stringify({ userId: findEmail2.rows[0].userId })
       );
 
       await sendMail.sendMail(sendMailOptions);
@@ -121,7 +112,7 @@ module.exports = {
         response,
         201,
         "Success Register Please Check Your Email",
-        [filtered]
+        user.rows
       );
     } catch (error) {
       console.log(error);
@@ -143,13 +134,14 @@ module.exports = {
 
       // 1. PROSES PENGECEKAN EMAIL
       const checkEmail = await authModel.getUserByEmail(email);
-      if (checkEmail.data.length < 1) {
+
+      if (checkEmail.rows.length < 1) {
         return wrapper.response(response, 404, "Wrong email input", null);
       }
 
       const validate = await bcrypt.compare(
         password,
-        checkEmail.data[0].password
+        checkEmail.rows[0].password
       );
 
       // 2. PROSES PENCOCOKAN PASSWORD
@@ -157,13 +149,15 @@ module.exports = {
         return wrapper.response(response, 401, "Wrong Password!", null);
       }
 
-      if (checkEmail.data[0].statusActive !== "active") {
+      console.log(checkEmail.rows[0].statusActive);
+
+      if (checkEmail.rows[0].statusActive !== "active") {
         return wrapper.response(response, 401, "Verify your email first", null);
       }
 
       const payload = {
-        userId: checkEmail.data[0].userId,
-        role: !checkEmail.data[0].role ? "user" : checkEmail.data[0].role,
+        userId: checkEmail.rows[0].userId,
+        role: !checkEmail.rows[0].role ? "user" : checkEmail.rows[0].role,
       };
 
       const token = jwt.sign(payload, process.env.JWT_SECRET, {
@@ -171,7 +165,7 @@ module.exports = {
       });
 
       // membuat refresh token
-      const refreshToken = jwt.sign(payload, process.env.REFRESH_KEYS, {
+      const refreshToken = jwt.sign(payload, process.env.REFRESH_KEYS_OAUTH, {
         expiresIn: "36h",
       });
       // 4. PROSES REPON KE USER
@@ -181,13 +175,7 @@ module.exports = {
         refreshToken,
       });
     } catch (error) {
-      console.log(error);
-      const {
-        status = 500,
-        statusText = "Internal Server Error",
-        error: errorData = null,
-      } = error;
-      return wrapper.response(response, status, statusText, errorData);
+      return console.log(error);
     }
   },
   refreshToken: async (req, res) => {
@@ -220,25 +208,28 @@ module.exports = {
       }
 
       // ketika mau generate access tokennya lagi, maka ini harus di hapus terlebih dahulu
-      jwt.verify(refreshtoken, process.env.REFRESH_KEYS, (error, result) => {
-        if (error) {
-          return wrapper.response(res, 403, error.message, null);
+      jwt.verify(
+        refreshtoken,
+        process.env.REFRESH_KEYS_OAUTH,
+        (error, result) => {
+          if (error) {
+            return wrapper.response(res, 403, error.message, null);
+          }
+          payload = {
+            userId: result.userId,
+            role: result.role,
+          };
+          token = jwt.sign(payload, process.env.JWT_SECRET, {
+            expiresIn: "24h",
+          });
+
+          newRefreshToken = jwt.sign(payload, process.env.REFRESH_KEYS_OAUTH, {
+            expiresIn: "36h",
+          });
+
+          client.setEx(`refreshToken:${refreshtoken}`, 3600 * 36, refreshtoken);
         }
-
-        payload = {
-          userId: result.userId,
-          role: result.role,
-        };
-        token = jwt.sign(payload, process.env.JWT_SECRET, {
-          expiresIn: "24h",
-        });
-
-        newRefreshToken = jwt.sign(payload, process.env.REFRESH_KEYS, {
-          expiresIn: "36h",
-        });
-
-        client.setEx(`refreshToken:${refreshtoken}`, 3600 * 36, refreshtoken);
-      });
+      );
 
       return wrapper.response(res, 200, "success refresh token", {
         userId: payload.userId,
@@ -246,12 +237,7 @@ module.exports = {
         refreshToken: newRefreshToken,
       });
     } catch (error) {
-      const {
-        status = 500,
-        statusText = "Internal Server Error",
-        error: errorData = null,
-      } = error;
-      return wrapper.response(res, status, statusText, errorData);
+      console.log(error);
     }
   },
   logout: async (req, res) => {
@@ -260,6 +246,7 @@ module.exports = {
       // eslint-disable-next-line prefer-destructuring
       const { refreshtoken } = req.headers;
       token = token.split(" ")[1];
+      console.log(req.headers);
       client.setEx(`accessToken:${token}`, 3600, token);
       client.setEx(`refreshToken:${refreshtoken}`, 3600, refreshtoken);
       return wrapper.response(res, 200, "success log out", null);
@@ -286,28 +273,15 @@ module.exports = {
         );
       }
       const userId = JSON.parse(verifyOtp);
-      const user = await User.updateUser(userId.userId, {
+      await User.updateStatusActive(userId.userId, {
         statusActive: "active",
       });
-      await client.del(`otp:${id}`);
-      const filterObj = ["userId"];
-
-      const filtered = Object.keys(user.data[0])
-        .filter((key) => filterObj.includes(key))
-        .reduce(
-          (obj, key) => ({
-            ...obj,
-            [key]: user.data[0][key],
-          }),
-          {}
-        );
+      // await client.del(`otp:${id}`);
 
       // const newResult = {
       //   userId: user.data[0].userId,
       // };
-      return wrapper.response(res, 200, "Account has been activated", [
-        filtered,
-      ]);
+      return wrapper.response(res, 200, "Account has been activated", []);
     } catch (error) {
       console.log(error);
       const {
@@ -322,14 +296,14 @@ module.exports = {
     try {
       const { email } = req.body;
       const findEmail = await authModel.getUserByEmail(email);
-      if (findEmail.data.length === 0) {
+
+      if (findEmail.rows.length === 0) {
         return wrapper.response(res, 401, "email not exist", null);
       }
 
       const generateOtp = Math.floor(100000 + Math.random() * 900000);
 
       const sendMailOptions = {
-        username: findEmail.data[0].username,
         to: email,
         subject: "forgot password",
         template: "resetPassword.html",
@@ -342,16 +316,17 @@ module.exports = {
       await client.setEx(
         `forgotPasswordOTP:${generateOtp}`,
         3600,
-        JSON.stringify({ userId: findEmail.data[0].userId })
+        JSON.stringify({ userId: findEmail.rows[0].userId })
       );
 
       return wrapper.response(
         res,
         200,
         "Process success please check your email",
-        [{ email: findEmail.data[0].email }]
+        [{ email: findEmail.rows[0].email }]
       );
     } catch (error) {
+      console.log(error);
       const {
         status = 500,
         statusText = "Internal Server Error",
@@ -411,12 +386,12 @@ module.exports = {
         password: encrypted,
       };
 
+      await User.updateUser(userReset.userId, setData);
+      const getUser = await User.getDataById(userReset.userId);
       await client.del(`forgotPasswordOTP:${otp}`);
 
-      const user = await User.updateUser(userReset.userId, setData);
-      console.log(user);
       return wrapper.response(res, 200, "success reset password ", {
-        userId: user.data[0].userId,
+        userId: getUser.rows[0].userId,
       });
     } catch (error) {
       console.log(error);

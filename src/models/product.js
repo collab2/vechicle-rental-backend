@@ -40,7 +40,8 @@ module.exports = {
   getCountProductById: (productId) =>
     new Promise((resolve, reject) => {
       connection.query(
-        `SELECT COUNT("productId") FROM product WHERE "productId"='${productId}'`,
+        `SELECT COUNT("productId") FROM product WHERE "productId"= $1`,
+        [productId],
         (error, result) => {
           if (!error) {
             resolve(result);
@@ -67,7 +68,8 @@ module.exports = {
   getProductById: (productId) =>
     new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM product WHERE "productId"='${productId}'`,
+        `SELECT * FROM product WHERE "productId"=$1`,
+        [productId],
         (error, result) => {
           if (!error) {
             resolve(result);
@@ -80,7 +82,18 @@ module.exports = {
   updateProduct: (productId, data) =>
     new Promise((resolve, reject) => {
       connection.query(
-        `UPDATE product SET nameProduct='${data.nameProduct}', location='${data.location}', description='${data.description}', status='${data.status}', stock='${data.stock}', price='${data.price}', category='${data.category}', capacity='${data.capacity}' WHERE "productId" = '${productId}'`,
+        `UPDATE product SET nameProduct=$1, location=$2, description=$3, status=$4, stock=$5, price=$6, category=$7, capacity=$8 WHERE "productId" = $8`,
+        [
+          data.nameProduct,
+          data.location,
+          data.description,
+          data.status,
+          data.stock,
+          data.price,
+          data.category,
+          data.capacity,
+          productId,
+        ],
         (error, result) => {
           if (!error) {
             resolve(result);
@@ -93,7 +106,8 @@ module.exports = {
   deleteProduct: (productId) =>
     new Promise((resolve, reject) => {
       connection.query(
-        `DELETE FROM product WHERE "productId"='${productId}'`,
+        `DELETE FROM product WHERE "productId"= $1`,
+        [productId],
         (error, result) => {
           if (!error) {
             resolve(result);
