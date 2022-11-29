@@ -24,11 +24,11 @@ module.exports = {
       const checkId = await userModel.getDataById(id);
       const { name, address, phone, birthDate, gender } = req.body;
       const setData = {
-        name: name || checkId.rows[0].name,
-        address: address || checkId.rows[0].address,
-        phone: phone || checkId.rows[0].phone,
-        birthDate: birthDate || checkId.rows[0].birthDate,
-        gender: gender || checkId.rows[0].gender,
+        name: name || "",
+        address: address || "",
+        phone: phone || "",
+        birthDate: birthDate || "",
+        gender: gender || "",
         image: image || checkId.rows[0].image,
         updatedAt: new Date(),
       };
