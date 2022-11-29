@@ -25,12 +25,12 @@ module.exports = {
       const { name, address, phone, birthDate, gender } = req.body;
       const test = req.file.path.split("/").slice(6).join("/");
       const setData = {
-        name: name || checkId.rows[0].name,
-        address: address || checkId.rows[0].address,
-        phone: phone || checkId.rows[0].phone,
-        birthDate: birthDate || checkId.rows[0].birthDate,
-        gender: gender || checkId.rows[0].gender,
-        image: test || image,
+        name: name || "",
+        address: address || "",
+        phone: phone || "",
+        birthDate: birthDate || "",
+        gender: gender || "",
+        image: image || checkId.rows[0].image,
         updatedAt: new Date(),
       };
 

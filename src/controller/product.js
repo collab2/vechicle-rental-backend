@@ -340,4 +340,23 @@ module.exports = {
       console.log(error);
     }
   },
+  getProduct: async (request, response) => {
+    try {
+      const result = await productModel.getProduct();
+
+      return wrapper.response(
+        response,
+        200,
+        "Success Get Greetings",
+        result.rows
+      );
+    } catch (error) {
+      const {
+        status = 500,
+        statusText = "Internal Server Error",
+        error: errorData = null,
+      } = error;
+      return wrapper.response(response, status, statusText, errorData);
+    }
+  },
 };
