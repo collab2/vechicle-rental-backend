@@ -56,11 +56,11 @@ module.exports = {
         }
       );
     }),
-  getAllProduct: (limit, offset, sort, nameproduct, location) =>
+  getAllProduct: (limit, offset, sort, category, nameproduct, location) =>
     new Promise((resolve, reject) => {
       if (!sort) {
         connection.query(
-          `SELECT * FROM product where product.location ilike '%${location}%' and product.nameproduct ilike '%${nameproduct}%' limit ${limit} offset ${offset}`,
+          `SELECT * FROM product where product.location ilike '%${location}%' and product.nameproduct ilike '%${nameproduct}%' and product.category ilike '%${category}%' limit ${limit} offset ${offset}`,
           (error, result) => {
             if (!error) {
               resolve(result);
@@ -70,9 +70,8 @@ module.exports = {
           }
         );
       } else if (sort === "latest") {
-        console.log("test2");
         connection.query(
-          `SELECT * FROM product where product.location ilike '%${location}%' and product.nameproduct  ilike '%${nameproduct}%' order by  "createdAt" ASC limit ${limit} offset ${offset}`,
+          `SELECT * FROM product where product.location ilike '%${location}%' and product.nameproduct  ilike '%${nameproduct}%' and product.category ilike '%${category}%' order by  "createdAt" ASC limit ${limit} offset ${offset}`,
 
           (error, result) => {
             if (!error) {
@@ -83,9 +82,8 @@ module.exports = {
           }
         );
       } else if (sort === "newest") {
-        console.log("test3");
         connection.query(
-          `SELECT * FROM product where product.location ilike '%${location}%' and product.nameproduct  ilike '%${nameproduct}%' order by  "createdAt" DESC limit ${limit} offset ${offset}`,
+          `SELECT * FROM product where product.location ilike '%${location}%' and product.nameproduct  ilike '%${nameproduct}%' and product.category ilike '%${category}%' order by  "createdAt" DESC limit ${limit} offset ${offset}`,
 
           (error, result) => {
             if (!error) {
@@ -169,6 +167,7 @@ module.exports = {
     }),
   deleteImageProduct: (data) =>
     new Promise((resolve, reject) => {
+      console.log("ini data", data);
       connection.query(
         `UPDATE product
         SET ${Object.keys(data)[0]} = NULL

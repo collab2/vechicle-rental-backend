@@ -100,7 +100,7 @@ module.exports = {
         );
       } else {
         connection.query(
-          `SELECT reservation."createdAt", product.nameproduct, product.category FROM reservation join product on (product."productId" = reservation."productId") WHERE product.nameproduct ilike '%${name}%' OR product.category = '%${category}%' LIMIT ${limit} OFFSET ${offset}`,
+          `SELECT * FROM reservation join product on (product."productId" = reservation."productId") WHERE product.nameproduct ilike '%${name}%' OR product.category = '%${category}%' LIMIT ${limit} OFFSET ${offset}`,
           (error, result) => {
             if (!error) {
               resolve(result);
@@ -135,11 +135,13 @@ module.exports = {
     new Promise((resolve, reject) => {
       supabase
         .from("reservation")
-        .select(`*, product(*)`)
+        .select(
+          `paymentMethods,startDate, returnDate, statusPayment, product(*)`
+        )
         .eq("userId", userId)
         .range(offset, offset + limit - 1)
-        .ilike("product.nameproduct", `%${nameProduct}%`)
         .order("createdAt", { ascending: asc })
+        .ilike("product.nameproduct", `%${nameProduct}%`)
         .then((result) => {
           if (!result.error) {
             resolve(result);

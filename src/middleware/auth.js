@@ -42,7 +42,7 @@ module.exports = {
     try {
       // PROSES UNTUK PENGECEKAN ROLE
       const result = request.decodeToken;
-
+      console.log(result);
       if (result.role === "user") {
         return wrapper.response(response, 403, "You're Not Admin", null);
       }
