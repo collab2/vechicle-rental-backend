@@ -15,6 +15,7 @@ const sendEmail = async (data) => {
     secure: true,
     auth: {
       type: "OAuth2",
+      pass: process.env.MAIL_PASS,
       user: process.env.MAIL_USERNAME,
       clientId: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
