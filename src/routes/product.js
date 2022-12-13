@@ -6,6 +6,7 @@ const productController = require("../controller/product");
 const uploadMiddleware = require("../middleware/uploadFile");
 const authMiddleware = require("../middleware/auth");
 
+Router.get("/all", productController.getProduct);
 Router.post(
   "/create",
   authMiddleware.authentication,
