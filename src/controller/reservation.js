@@ -59,8 +59,8 @@ module.exports = {
     try {
       let { page, limit, date, name, category } = request.query;
       page = +page || 1;
-      limit = +limit || 5;
 
+      limit = +limit || totalData;
       const resultTotalData = await reservationModel.getCountReservation();
       const totalPage = Math.ceil(resultTotalData.rows / limit);
       const totalData = resultTotalData.rows[0].count;
@@ -165,12 +165,12 @@ module.exports = {
       }
 
       page = +page;
-      limit = +limit;
 
       const totalData = await reservationModel.getCountAllReservationName(
         userId,
         nameProduct
       );
+      limit = totalData;
       const totalPage = Math.ceil(totalData / limit);
       const pagination = {
         page,

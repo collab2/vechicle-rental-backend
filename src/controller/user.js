@@ -23,6 +23,7 @@ module.exports = {
       const image = req?.file?.filename;
       const checkId = await userModel.getDataById(id);
       const { name, address, phone, birthDate, gender } = req.body;
+      const test = req.file.path.split("/").slice(6).join("/");
       const setData = {
         name: name || "",
         address: address || "",
@@ -33,8 +34,8 @@ module.exports = {
         updatedAt: new Date(),
       };
 
-      console.log(checkId.rows[0]);
-      if (image) {
+      if (setData.image) {
+        console.log("test");
         cloudinary.uploader.destroy(checkId?.rows[0]?.image, (result) => {
           console.log(result);
         });
