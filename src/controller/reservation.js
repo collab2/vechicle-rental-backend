@@ -59,8 +59,8 @@ module.exports = {
     try {
       let { page, limit, date, name, category } = request.query;
       page = +page || 1;
-      limit = +limit || 5;
 
+      limit = +limit || totalData;
       const resultTotalData = await reservationModel.getCountReservation();
       const totalPage = Math.ceil(resultTotalData.rows / limit);
       const totalData = resultTotalData.rows[0].count;
@@ -132,24 +132,87 @@ module.exports = {
   getReservationByUserId: async (request, response) => {
     try {
       const { userId } = request.params;
+      console.log(userId);
 
-      const result = await reservationModel.getReservationByUserId(userId);
-      console.log(result);
-      if (result.rowCount === 0) {
-        return wrapper.response(
-          response,
-          200,
-          `Reservation not found`,
-          result.rows
-        );
+      const data = request.query;
+
+      // eslint-disable-next-line no-restricted-syntax
+      for (const property in data) {
+        if (data[property] === "") {
+          data[property] = undefined;
+        }
       }
-      // console.log(result.rows.slice(6, 7));
+
+      console.log(data);
+
+      // eslint-disable-next-line prefer-const
+      let { page, limit, asc, nameProduct } = data;
+
+      if (asc !== undefined) {
+        if (asc === "true") {
+          asc = true;
+        } else {
+          asc = false;
+        }
+      }
+
+      if (page === undefined) {
+        page = 1;
+      }
+
+      if (limit === undefined) {
+        limit = 4;
+      }
+
+      page = +page;
+
+      const totalData = await reservationModel.getCountAllReservationName(
+        userId,
+        nameProduct
+      );
+      limit = totalData;
+      const totalPage = Math.ceil(totalData / limit);
+      const pagination = {
+        page,
+        totalPage,
+        limit,
+        totalData,
+      };
+
+      const offset = page * limit - limit;
+
+      const result = await reservationModel.getReservationByUserId(
+        userId,
+        nameProduct,
+        offset,
+        limit,
+        asc
+      );
+      console.log(result);
+
       return wrapper.response(
         response,
-        200,
-        "Success Get Reservation",
-        result.rows
+        result.status,
+        "Success Get Reservation By User Id",
+        result.data,
+        pagination
       );
+
+      // if (result.rowCount === 0) {
+      //   return wrapper.response(
+      //     response,
+      //     200,
+      //     `Reservation not found`,
+      //     result.rows
+      //   );
+      // }
+      // // console.log(result.rows.slice(6, 7));
+      // return wrapper.response(
+      //   response,
+      //   200,
+      //   "Success Get Reservation",
+      //   result.rows
+      // );
     } catch (error) {
       console.log(error);
       const {

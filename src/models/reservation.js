@@ -1,4 +1,5 @@
 const connection = require("../config/postgresql");
+const supabase = require("../config/supabase");
 
 module.exports = {
   createReservation: (data) =>
@@ -69,6 +70,21 @@ module.exports = {
         }
       );
     }),
+  getCountAllReservationName: (userId, nameProduct = "") =>
+    new Promise((resolve, reject) => {
+      supabase
+        .from("reservation")
+        .select("*, product(*)", { count: "exact" })
+        .eq("userId", userId)
+        .ilike("product.nameproduct", `%${nameProduct}%`)
+        .then((result) => {
+          if (!result.error) {
+            resolve(result.count);
+          } else {
+            reject(result);
+          }
+        });
+    }),
   getAllReservation: (limit, offset, date, name = "", category = "") =>
     new Promise((resolve, reject) => {
       if (date) {
@@ -84,7 +100,7 @@ module.exports = {
         );
       } else {
         connection.query(
-          `SELECT reservation."createdAt", product.nameproduct, product.category FROM reservation join product on (product."productId" = reservation."productId") WHERE product.nameproduct ilike '%${name}%' OR product.category = '%${category}%' LIMIT ${limit} OFFSET ${offset}`,
+          `SELECT * FROM reservation join product on (product."productId" = reservation."productId") WHERE product.nameproduct ilike '%${name}%' OR product.category = '%${category}%' LIMIT ${limit} OFFSET ${offset}`,
           (error, result) => {
             if (!error) {
               resolve(result);
@@ -109,19 +125,30 @@ module.exports = {
         }
       );
     }),
-  getReservationByUserId: (id) =>
+  getReservationByUserId: (
+    userId,
+    nameProduct = "",
+    offset = 0,
+    limit = 4,
+    asc = true
+  ) =>
     new Promise((resolve, reject) => {
-      connection.query(
-        `SELECT * FROM reservation WHERE "userId"='${id}'`,
-
-        (error, result) => {
-          if (!error) {
+      supabase
+        .from("reservation")
+        .select(
+          `paymentMethods,startDate, returnDate, statusPayment, product(*)`
+        )
+        .eq("userId", userId)
+        .range(offset, offset + limit - 1)
+        .order("createdAt", { ascending: asc })
+        .ilike("product.nameproduct", `%${nameProduct}%`)
+        .then((result) => {
+          if (!result.error) {
             resolve(result);
           } else {
-            reject(new Error(error));
+            reject(result);
           }
-        }
-      );
+        });
     }),
   getReservationByProductId: (id) =>
     new Promise((resolve, reject) => {
