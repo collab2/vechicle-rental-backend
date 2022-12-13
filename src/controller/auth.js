@@ -64,9 +64,11 @@ module.exports = {
           subject: "email verification",
           template: "verificationEmail.html",
 
-          buttonUrl: `https://vehicle-rental-frontend-sigma.vercel.app/api/auth/verify/${generateOtp}`,
+          buttonUrl: `https://vechicle-rental-backend.vercel.app/api/auth/verify/${generateOtp}`,
           otp: generateOtp,
         };
+
+        console.log("test");
 
         const findEmail2 = await authModel.getUserByEmail(email);
 
@@ -94,7 +96,7 @@ module.exports = {
         to: email,
         subject: "email verification",
         template: "verificationEmail.html",
-        buttonUrl: `https://vehicle-rental-frontend-sigma.vercel.app/api/auth/verify/${generateOtp}`,
+        buttonUrl: `https://vechicle-rental-backend.vercel.app/api/auth/verify/${generateOtp}`,
         otp: generateOtp,
       };
 
@@ -308,7 +310,7 @@ module.exports = {
         to: email,
         subject: "forgot password",
         template: "resetPassword.html",
-        buttonUrl: `https://vehicle-rental-frontend-sigma.vercel.app/api/auth/resetPassword/${generateOtp}`,
+        buttonUrl: `https://vechicle-rental-backend.vercel.app/api/auth/resetPassword/${generateOtp}`,
         otp: generateOtp,
       };
 
