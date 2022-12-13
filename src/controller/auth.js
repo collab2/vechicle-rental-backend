@@ -68,6 +68,8 @@ module.exports = {
           otp: generateOtp,
         };
 
+        console.log("test");
+
         const findEmail2 = await authModel.getUserByEmail(email);
 
         await client.setEx(
