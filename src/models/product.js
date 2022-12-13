@@ -167,6 +167,7 @@ module.exports = {
     }),
   deleteImageProduct: (data) =>
     new Promise((resolve, reject) => {
+      console.log("ini data", data);
       connection.query(
         `UPDATE product
         SET ${Object.keys(data)[0]} = NULL

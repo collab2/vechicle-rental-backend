@@ -5,7 +5,7 @@ const authModel = require("../models/auth");
 const wrapper = require("../utils/wrapper");
 const User = require("../models/user");
 const client = require("../config/redis");
-const sendMail = require("../utils/mail");
+const { sendEmail } = require("../utils/mail");
 
 module.exports = {
   register: async (request, response) => {
@@ -76,7 +76,7 @@ module.exports = {
           JSON.stringify({ userId: findEmail2.rows[0].userId })
         );
 
-        await sendMail.sendMail(sendMailOptions);
+        await sendEmail(sendMailOptions);
 
         return wrapper.response(
           response,
@@ -106,7 +106,7 @@ module.exports = {
         JSON.stringify({ userId: findEmail2.rows[0].userId })
       );
 
-      await sendMail.sendMail(sendMailOptions);
+      await sendEmail(sendMailOptions);
 
       return wrapper.response(
         response,
@@ -312,7 +312,7 @@ module.exports = {
         otp: generateOtp,
       };
 
-      await sendMail.sendMail(sendMailOptions);
+      await sendEmail(sendMailOptions);
 
       await client.setEx(
         `forgotPasswordOTP:${generateOtp}`,

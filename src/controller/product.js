@@ -70,6 +70,8 @@ module.exports = {
         resultTotalData,
       };
 
+      console.log(totalData);
+
       const offset = page * limit - limit;
 
       const result = await productModel.getAllProduct(
@@ -307,14 +309,14 @@ module.exports = {
   deleteImage: async (req, res) => {
     try {
       const { productId } = req.params;
-      console.log(req.body.image1);
+      // console.log(req.body.image1);
       const getProductData = await productModel.getProductById(productId);
-      console.log(getProductData.rows[0]);
+      // console.log(getProductData.rows[0]);
       if (req.body.image1) {
         cloudinary.uploader.destroy(
           getProductData?.rows[0]?.image1,
           (result) => {
-            console.log(result);
+            // console.log(result);
           }
         );
       }
@@ -322,7 +324,7 @@ module.exports = {
         cloudinary.uploader.destroy(
           getProductData?.rows[0]?.image2,
           (result) => {
-            console.log(result);
+            // console.log(result);
           }
         );
       }
@@ -330,10 +332,11 @@ module.exports = {
         cloudinary.uploader.destroy(
           getProductData?.rows[0]?.image3,
           (result) => {
-            console.log(result);
+            // console.log(result);
           }
         );
       }
+      console.log("test", req.body);
       await productModel.deleteImageProduct(req.body);
       return wrapper.response(res, 200, "success delete image", null);
     } catch (error) {
